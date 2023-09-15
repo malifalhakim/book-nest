@@ -1,8 +1,42 @@
+{% extends 'base.html' %} {% block content %}
 <h1>Book Nest</h1>
 
 <h5>Name:</h5>
-<p>{{ name }}</p>
-<!-- Ubahlah sesuai dengan nama kamu -->
+<p>{{name}}</p>
+
 <h5>Class:</h5>
-<p>{{ class }}</p>
-<!-- Ubahlah sesuai dengan kelas kamu -->
+<p>{{class}}</p>
+
+<p>
+  Saat ini, kami memiliki total {{items.count}} judul buku yang dapat Anda
+  temukan di Book Nest
+</p>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Amount</th>
+    <th>Author</th>
+    <th>Description</th>
+  </tr>
+
+  {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini
+  {%endcomment %} {% for item in items %}
+  <tr>
+    <td>{{item.name}}</td>
+    <td>{{item.price}}</td>
+    <td>{{item.amount}}</td>
+    <td>{{item.author}}</td>
+    <td>{{item.description}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<br />
+
+<a href="{% url 'main:create_item' %}">
+  <button>Add New Item</button>
+</a>
+
+{% endblock content %}
