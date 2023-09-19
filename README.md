@@ -27,7 +27,7 @@ Pertama, JSON memiliki karakteristik yang simple dan mudah dibaca. JSON cenderun
 
 - #### Membuat input form untuk menambahkan objek model pada app sebelumnya.
 
-1. Untuk mempermudah proses selanjutnya, diatur routing dari `main` ke `/` agar aplikasi main dapat diakses langsung saat membuka website. Buka `urls.py` yang ada pada folder proyek `book_nest` dan ubah path `main/` menjadi ` ` pada`urlpatterns`.
+1. Untuk mempermudah proses selanjutnya, diatur routing dari `main` ke `/` agar aplikasi main dapat diakses langsung saat membuka website. Buka `urls.py` yang ada pada folder proyek `book_nest` dan ubah path `main/` menjadi `''` pada `urlpatterns`.
 2. Implementasi Skeleton sebagai kerangka views. Buat folder `templates` pada _root folder_ dan buat sebuah berkas HTML baru bernama `base.html` yang berfungsi sebagai template dasar halaman web lainnya. Lalu isi `base.html` dengan kode berikut:
 
 ```
@@ -67,14 +67,17 @@ TEMPLATES = [
 4. Ubah berkas `main.html` pada direktori `main` sehingga menggunakan template dari `base.html` seperti berikut.
 
 ```
-{% extends 'base.html' %} {% block content %}
-<h1>Book Nest</h1>
+{% extends 'base.html' %}
 
-<h5>Name:</h5>
-<p>{{name}}</p>
+{% block content %}
+  <h1>Book Nest</h1>
 
-<h5>Class:</h5>
-<p>{{class}}</p>
+  <h5>Name:</h5>
+  <p>{{name}}</p>
+
+  <h5>Class:</h5>
+  <p>{{class}}</p>
+{% endblock content %}
 ```
 
 5. Buat berkas `forms.py` pada direktori `main` untuk membuat struktur form yang dapat menerima data item baru. Isi `forms.py` dengan kode berikut.
@@ -110,7 +113,7 @@ def create_item(request):
 7. Import fungsi tersebut dan tambahkan _path url_ ke dalam `urlpatterns` pada `urls.py` di `main`.
 
 ```
-path('create-product', create_product, name='create_product'),
+path('create-item', create_item, name='create_item'),
 ```
 
 8.  Buat berkas `create_item.html` pada direktori `main/templates` dan isi dengan kode berikut untuk membuat halaman form
@@ -136,7 +139,7 @@ path('create-product', create_product, name='create_product'),
 
 ```
 
-9. Tambahkan kode berikut pada `main.html` di dalam `{% block content %}` untuk menampilkan data produk dalam bentuk _table_ serta tombol "Add New Item" yang akan _redirect_ ke halaman form`
+9. Tambahkan kode berikut pada `main.html` di dalam `{% block content %}` untuk menampilkan data produk dalam bentuk _table_ serta tombol "Add New Item" yang akan _redirect_ ke halaman form.
 
 ```
 <p>
