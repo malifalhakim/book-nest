@@ -7,10 +7,7 @@
 <h5>Class:</h5>
 <p>{{class}}</p>
 
-<p>
-  Saat ini, kami memiliki total {{items.count}} judul buku yang dapat Anda
-  temukan di Book Nest
-</p>
+<p>Saat ini, kamu memiliki total {{items.count}} judul buku.</p>
 
 <table>
   <tr>
@@ -35,8 +32,14 @@
 
 <br />
 
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+
 <a href="{% url 'main:create_item' %}">
   <button>Add New Item</button>
+</a>
+
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
 </a>
 
 {% endblock content %}
