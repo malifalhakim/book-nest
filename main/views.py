@@ -84,3 +84,32 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def increase_amount(request, pk):
+    item = Item.objects.get(pk=pk)
+
+    if request.method == "POST" and "increase_amount" in request.POST:
+        item.amount += 1
+        item.save()
+    
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def decrease_amount(request,pk):
+    item = Item.objects.get(pk = pk)
+
+    if request.method == "POST" and "decrease_amount" in request.POST:
+        if item.amount > 1:
+            item.amount -= 1
+            item.save()
+        else:
+            # Jika dihapus amount = 0
+            item.delete()
+    
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def delete_item(request,pk):
+    item = Item.objects.get(pk = pk)
+    if request.method == "POST" and "delete_item" in request.POST:
+        item.delete()
+
+    return HttpResponseRedirect(reverse('main:show_main'))

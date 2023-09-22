@@ -16,6 +16,7 @@
     <th>Amount</th>
     <th>Author</th>
     <th>Description</th>
+    <th>Action</th>
   </tr>
 
   {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini
@@ -26,7 +27,22 @@
     <td>{{item.amount}}</td>
     <td>{{item.author}}</td>
     <td>{{item.description}}</td>
+    <td>
+      <form method="POST" action="{% url 'main:increase_amount' pk=item.pk %}">
+        {% csrf_token %}
+        <button type="submit" name="increase_amount">+</button>
+      </form>
+      <form method="POST" action="{% url 'main:decrease_amount' pk=item.pk %}">
+        {% csrf_token %}
+        <button type="submit" name="decrease_amount">-</button>
+      </form>
+      <form method="POST" action="{% url 'main:delete_item' pk=item.pk %}">
+        {% csrf_token %}
+        <button type="submit" name="delete_item">Delete</button>
+      </form>
+    </td>
   </tr>
+
   {% endfor %}
 </table>
 
