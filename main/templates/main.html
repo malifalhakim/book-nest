@@ -7,10 +7,7 @@
 <h5>Class:</h5>
 <p>{{class}}</p>
 
-<p>
-  Saat ini, kami memiliki total {{items.count}} judul buku yang dapat Anda
-  temukan di Book Nest
-</p>
+<p>Saat ini, kamu memiliki total {{items.count}} judul buku.</p>
 
 <table>
   <tr>
@@ -19,6 +16,7 @@
     <th>Amount</th>
     <th>Author</th>
     <th>Description</th>
+    <th>Action</th>
   </tr>
 
   {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini
@@ -29,14 +27,35 @@
     <td>{{item.amount}}</td>
     <td>{{item.author}}</td>
     <td>{{item.description}}</td>
+    <td>
+      <form method="POST" action="{% url 'main:increase_amount' pk=item.pk %}">
+        {% csrf_token %}
+        <button type="submit" name="increase_amount">+</button>
+      </form>
+      <form method="POST" action="{% url 'main:decrease_amount' pk=item.pk %}">
+        {% csrf_token %}
+        <button type="submit" name="decrease_amount">-</button>
+      </form>
+      <form method="POST" action="{% url 'main:delete_item' pk=item.pk %}">
+        {% csrf_token %}
+        <button type="submit" name="delete_item">Delete</button>
+      </form>
+    </td>
   </tr>
+
   {% endfor %}
 </table>
 
 <br />
 
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+
 <a href="{% url 'main:create_item' %}">
   <button>Add New Item</button>
+</a>
+
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
 </a>
 
 {% endblock content %}
