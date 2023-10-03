@@ -711,3 +711,346 @@ def logout_user(request):
 ```
 
 4. Tambahkan kode berikut `<h5>Sesi terakhir login: {{ last_login }}</h5>` pada `main.html` untuk menampilkan data last login.
+
+
+# Tugas 5
+### Jelaskan manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya.
+
+* Element Selector
+Manfaat: Memberikan style pada `tag` html tertentu, seperti `<div>,<p>`.<br>
+Digunakan ketika ingin memberikan style pada semua tag html tertentu.
+
+* Class Selector
+Manfaat: Memberikan style pada element html dengan nilai atribut suatu class tertentu, seperti `<div class ='container>`. <br>
+Digunakan ketika ingin memberikan style yang sama pada elemen-elemen yang memiliki karakteristik yang sama (elemen-elemen yang ingin diberi style yang sama diberi nilai class yang sama).
+
+* ID Selector
+Manfaat: Memberikan style pada suatu element tertentu berdasarkan nilai atribut Id yang diberikan.
+Digunakan ketika ingin memberikan style hanya pada satu element tertentu.
+
+* Attribute Selector
+Manfaat: Memberikan style pada element-element yang memiliki atribut tertentu atau atribut dengan nilai tertentu.
+Digunakan ketika ingin memberikan style pada element-element yang mempunyai kesamaan atribut yang dipunya.
+
+* Universal Selector
+Manfaat: Memberikan style pada semua element HTML 
+Digunakan ketika ingin memberikan style yang berlaku pada semua element HTML.
+
+### Jelaskan HTML5 Tag yang kamu ketahui.
+
+* `<html>` : Digunakan untuk mendefinisikan seluruh dokumen HTML.
+* `<h1>`-`<h6>` : Digunakan untuk membuat judul dan sub-judul dengan `<h1>` sebagai judul utama dan `<h6>` sebagai subjudul terkecil.
+* `<p>` : Berfungsi untuk mendefinisikan paragraf.
+* `<div>` : Berfungsi untuk mengelompokkan elemen-elemen lain dan membuat baris baru saat dibuat.
+* `<span>` : Berfungsi untuk mengelompokkan elemen-elemen lain tetapi sebagai `inline-element`.
+* `<ol>` : Berfungsi untuk membuat daftar terurut.
+* `<ul>` : Berfungsi untuk membuat daftar tak terurut.
+* `<li>` : Digunakan di dalam `<ol>` atau `<ul>` sebagai item dari daftar.
+* `<form>` : Mengelompokkan elemen-elemen terkait dalam sebuah formulir yang berguna untuk mengirimkan data ke server
+* `<table>` : Digunakan untuk mendefinisikan seluruh tabel.
+* `<tr>`: Mendefinisikan baris dalam tabel.
+
+###  Jelaskan perbedaan antara margin dan padding.
+Margin adalah ruang kosong di sekitar suatu elemen HTML yang memisahkannya dengan elemen lain pada HTML. Sementara padding adalah ruang kosong di dalam elemen HTML sendiri yang memisahkan content atau isi dari elemen HTML dengan border-nya.
+
+### Jelaskan perbedaan antara framework CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya?
+
+Perbedaan : <br>
+1. Tailwind CSS membangun tampilan dengan menggabungkan kelas-kelas utilitas yang telah didefinisikan. Bootstrap menggunakan gaya dan komponen yang telah didefinisikan dan mempunyai tampilan yang sudah jadi.
+
+2. Tailwind CSS memiliki file CSS yang lebih kecil dibandingkan Bootstrap dikarenakan hanya berisi kelas-kelas utilitas saja dibanding bootsrap yang memiliki banyak komponen yang telah didefinisikan.
+
+3. Bootsrap akan membantu pembangunan website dengan lebih cepat karena memiliki banyak komponen yang telah didefinisikan.
+
+Tailwind akan lebih baik digunakan jika kita ingin mempunyai kebebasan dalam memberikan style pada komponen sehingga website yang dibuat akan memiliki keunikan dalam segi desain. Sementara bootstrap lebih baik digunakan jika kita ingin mengembangkan/membuat website dalam waktu yang cepat dan tidak terlalu mementingkan keunikan desain.
+
+### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+##### Kustomisasi Halaman Login
+1. Pada `base.html` tambahkan kode berikut pada bagian `<head>` untuk menggunakan Bootstrap nantinya.
+```
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+J4jsl5c9zdLKaUk5Ae5f5b1bw6AUn5f5v8FZJoMxm6f5cH1"
+      crossorigin="anonymous"
+    ></script>
+    <link rel= "stylesheet" href= "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+```
+2. Pada block content tambahkan kode berikut untuk membuat navbar
+```
+    <nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+        <i class="bi bi-journal-bookmark-fill"></i>
+        BookNest
+        </a>
+        <a class="btn btn-secondary" href="{% url 'main:register' %}">Register</a>
+    </div>
+    </nav>
+```
+
+3. Pada bagian `<div class = "login">` ubah kode menjadi seperti berikut untuk membuat login form berada di tengah halaman dan mengubah form yang awalnya berbentuk tabel menjadi beberapa class `form-group` (class bootstrap) sehingga form hanya terdiri dari field berisi nilai placeholder.
+
+```
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="login text-center border p-4">
+
+    <!-- judul form -->
+    <h1 class="mb-3"><i class="bi bi-door-open"></i>Login</h1>
+
+    <!-- formulir login -->
+    <form method="POST" action="">
+      {% csrf_token %}
+
+      <!-- field username -->
+      <div class="form-group mb-3">
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          class="form-control"
+        />
+      </div>
+
+      <!-- field password -->
+      <div class="form-group mb-3">
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          class="form-control"
+        />
+      </div>
+
+      <!-- button submit form   -->
+      <div class="form-group mb-3 d-grid">
+        <button class="btn btn-outline-primary" type="submit">Login</button>
+      </div>
+      
+    </form>
+
+    <!-- menampilkan pesan jika ada -->
+    {% if messages %}
+    <div class="alert alert-danger">
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    
+    <p>Don't have an account yet? <a href="{% url 'main:register' %}" style="text-decoration: none;">Register Now</a></p>
+  </div>
+</div>
+```
+
+##### Kustomisasi Halaman Register
+1. Menambahkan Navbar yang terdiri dari nama aplikasi dan tombol ke halaman login.
+```
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-journal-bookmark-fill"></i>
+      BookNest
+    </a>
+    <a class="btn btn-secondary" href="{% url 'main:login' %}">Login</a>
+  </div>
+</nav>
+```
+
+2. Mengubah {{form.as_table}} menjadi render secara manual seperti berikut.
+```
+<form method="POST">
+      {% csrf_token %}
+    
+      {% for field in form %}
+
+        <div class="form-group mb-3 d-grid">
+          <strong>{{field.label}}</strong>
+          {% if field.name == "password1" or field.name == "password2" %}
+            <input type="password" name="{{ field.name }}" class="responsive-input" value="{{ field.value|default_if_none:'' }}" class="form-control" placeholder="{{field.label}}">
+          {% else %}
+            <input type="text" name="{{ field.name }}" class="responsive-input" value="{{ field.value|default_if_none:'' }}" class="form-control" placeholder="{{field.label}}">
+          {% endif %}
+        </div>
+
+        <div class="form-group mb-3 alert alert-primary small">
+          {{field.help_text}}
+        </div>
+
+        {% if field.errors %}
+          <div class="form-group mb-3 alert alert-danger small">
+            {{field.errors}}
+          </div>
+        {% endif %}
+
+      {% endfor %}
+        
+      <div class="form-group mb-3 d-grid">
+        <button class="btn btn-outline-primary" type="submit">Daftar</button>
+      </div>
+
+</form>
+```
+
+3. Menggabungkan form, judul, dan elemen lain pada sebuah container. Hal ini bertujuan agar formulir register (keseluruhan) bisa dipindahkan ke tengah halaman.
+
+```
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="login border p-4">
+    <h1 class="mb-3 text-center"><i class="bi bi-person"></i>Register</h1>
+
+    <form method="POST">
+      ....
+    </form>
+
+    {% if messages %}
+    <div class="alert alert-danger"></div>
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    <div>
+    {% endif %}
+  </div>
+</div>
+```
+
+##### Kustomisasi Halaman Add New Item
+1. Menambahkan navbar yang berisi nama aplikasi dan tombol kembali ke halaman utama.
+```
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-journal-bookmark-fill"></i>
+      BookNest
+    </a>
+    <a class="btn btn-secondary" href="{% url 'main:show_main' %}">Back to Main</a>
+  </div>
+</nav>
+```
+
+2. Melakukan rendering form secara manual (menggantikan {{forms.as_table}}) yang mana setiap field punya type input tersendiri seperti deskripsi menggunakan textarea sekaligus mengelompokkan elemen formulir pada sebuah div agar dapat dipindahkan ke tengah halaman.
+
+```
+div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="login border p-4">
+    <h1 class="mb-3 text-center"><i class="bi bi-file-plus"></i>Add New Item</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      {% for field in form %}
+
+      <div class="form-group mb-3 d-grid">
+        <strong>{{field.label}}</strong>
+        {% if field.name == "price" or field.name == "amount" %}
+          <input type="number" name="{{ field.name }}" class="responsive-input form-control" value="{{ field.value|default_if_none:'' }}" placeholder="{{field.label}}">
+        {% elif field.name == "description" %}
+          <textarea name="{{ field.name }}" class="responsive-input form-control" cols="60" rows="3" placeholder="{{field.label}}">{{ field.value|default_if_none:'' }}</textarea>
+        {% else %}
+          <input type="text" name="{{ field.name }}" class="responsive-input form-control" value="{{ field.value|default_if_none:'' }}" placeholder="{{field.label}}">
+        {% endif %}
+      </div>
+
+      {% endfor %}
+      
+      <div class="form-group mb-3 d-grid">
+        <button class="btn btn-outline-primary" type="submit">Add Item</button>
+      </div>
+        
+    </form>
+  </div>
+</div>
+```
+
+##### Kustomisasi Halaman Inventori / Daftar Item
+1. Menambahkan Navbar yang berisi nama aplikasi, tombol logout, dan tombol untuk menambah Item.
+```
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-journal-bookmark-fill"></i>
+      BookNest
+    </a>
+    <div>
+      <a class="btn btn-secondary" href="{% url 'main:create_item' %}">Add New Item</a>
+      <a class="btn btn-secondary" href="{% url 'main:logout' %}">Logout</a>
+    </div>
+  </div>
+</nav>
+```
+
+2. Mengubah bagian Nama dan Class menjadi seperti berikut agar lebih ringkas serta memindahkan judul ke tengah.
+```
+<h1 class="text-center mt-3 mb-5"><i class="bi bi-journal-bookmark-fill"></i>BookNest</h1>
+
+<div class="p-3 font-monospace">
+  <p >Selamat datang <strong>{{name}}</strong> dari kelas <strong>{{class}}</strong></p>
+  <p>Saat ini, kamu memiliki total <strong>{{items.count}}</strong> judul buku.</p>
+</div>
+```
+
+3. Mengubah tampilan tabel item menjadi menggunakan kumpulan Card yang berisi informasi dari setiap baris sebelumnya. Posisi dari Card diatur menggunakan Grid yang diimplementasikan dengan bootstrap. Selain itu, tombol untuk setiap baris data diubah style-nya.
+```
+<!-- Menampilkan semua data menggunakan pendekatan Card -->
+
+<div class="row p-3">
+  {% for item in items %}
+  <div class="col-sm-4">
+    <div class="card bg-light mb-3">
+      <div class="card-header text-center {% if forloop.last %}text-danger{% endif %}"><h5>{{item.name}}</h5></div>
+      <div class="card-body">
+        <p class="card-text" style="text-align: justify;">
+          Price: <strong>{{item.price}}</strong><br/>
+          Amount: <strong>{{item.amount}}</strong><br/>
+          Author: <strong>{{item.author}}</strong><br/>
+          Description: <br/>
+          {{item.description}}
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+          <form method="POST" action="{% url 'main:increase_amount' pk=item.pk %}">
+            {% csrf_token %}
+            <button type="submit" name="increase_amount" class="btn btn-success">+</button>
+          </form>
+          <form method="POST" action="{% url 'main:decrease_amount' pk=item.pk %}">
+            {% csrf_token %}
+            <button type="submit" name="decrease_amount" class="btn btn-warning">-</button>
+          </form>
+          <form method="POST" action="{% url 'main:delete_item' pk=item.pk %}">
+            {% csrf_token %}
+            <button type="submit" name="delete_item" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+```
+
+4. Mengubah layout/posisi dari informasi sesi login, tombol add new item, dan tombol logout. Sekaligus memberikan style pada tombol-tombol tersebut.
+```
+<div class="p-3 font-monospace d-flex justify-content-between">
+  <span>Sesi terakhir login: {{ last_login }}</span>
+
+  <div>
+    <a href="{% url 'main:create_item' %}" class="text-decoration-none">
+      <button class="btn btn-primary">Add New Item</button>
+    </a>
+
+    <a href="{% url 'main:logout' %}" class="text-decoration-none">
+      <button class="btn btn-danger">Logout</button>
+    </a>
+  </div>
+
+</div>
+```
