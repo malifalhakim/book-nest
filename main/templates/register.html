@@ -1,28 +1,67 @@
-{% extends 'base.html' %} {% block meta %}
+{% extends 'base.html' %} 
+
+{% block meta %}
 <title>Register</title>
-{% endblock meta %} {% block content %}
+{% endblock meta %} 
 
-<div class="login">
-  <h1>Register</h1>
+{% block content %}
 
-  <form method="POST">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input type="submit" name="submit" value="Daftar" /></td>
-      </tr>
-    </table>
-  </form>
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-journal-bookmark-fill"></i>
+      BookNest
+    </a>
+    <a class="btn btn-secondary" href="{% url 'main:login' %}">Login</a>
+  </div>
+</nav>
 
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="login border p-4">
+    <h1 class="mb-3 text-center"><i class="bi bi-person"></i>Register</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+    
+      {% for field in form %}
+
+        <div class="form-group mb-3 d-grid">
+          <strong>{{field.label}}</strong>
+          {% if field.name == "password1" or field.name == "password2" %}
+            <input type="password" name="{{ field.name }}" class="responsive-input" value="{{ field.value|default_if_none:'' }}" class="form-control" placeholder="{{field.label}}">
+          {% else %}
+            <input type="text" name="{{ field.name }}" class="responsive-input" value="{{ field.value|default_if_none:'' }}" class="form-control" placeholder="{{field.label}}">
+          {% endif %}
+        </div>
+
+        <div class="form-group mb-3 alert alert-primary small">
+          {{field.help_text}}
+        </div>
+
+        {% if field.errors %}
+          <div class="form-group mb-3 alert alert-danger small">
+            {{field.errors}}
+          </div>
+        {% endif %}
+
+      {% endfor %}
+        
+      <div class="form-group mb-3 d-grid">
+        <button class="btn btn-outline-primary" type="submit">Daftar</button>
+      </div>
+
+    </form>
+
+    {% if messages %}
+    <div class="alert alert-danger"></div>
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    <div>
+    {% endif %}
+  </div>
 </div>
 
 {% endblock content %}
