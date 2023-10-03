@@ -1,61 +1,72 @@
-{% extends 'base.html' %} {% block content %}
-<h1>Book Nest</h1>
+{% extends 'base.html' %} 
 
-<h5>Name:</h5>
-<p>{{name}}</p>
+{% block content %}
 
-<h5>Class:</h5>
-<p>{{class}}</p>
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-journal-bookmark-fill"></i>
+      BookNest
+    </a>
+    <div>
+      <a class="btn btn-secondary" href="{% url 'main:create_item' %}">Add New Item</a>
+      <a class="btn btn-secondary" href="{% url 'main:logout' %}">Logout</a>
+    </div>
+  </div>
+</nav>
 
-<p>Saat ini, kamu memiliki total {{items.count}} judul buku.</p>
+<h1 class="text-center mt-3 mb-5"><i class="bi bi-journal-bookmark-fill"></i>BookNest</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Price</th>
-    <th>Amount</th>
-    <th>Author</th>
-    <th>Description</th>
-    <th>Action</th>
-  </tr>
+<div class="p-3 font-monospace">
+  <p >Selamat datang <strong>{{name}}</strong> dari kelas <strong>{{class}}</strong></p>
+  <p>Saat ini, kamu memiliki total <strong>{{items.count}}</strong> judul buku.</p>
+</div>
 
-  {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini
-  {%endcomment %} {% for item in items %}
-  <tr>
-    <td>{{item.name}}</td>
-    <td>{{item.price}}</td>
-    <td>{{item.amount}}</td>
-    <td>{{item.author}}</td>
-    <td>{{item.description}}</td>
-    <td>
-      <form method="POST" action="{% url 'main:increase_amount' pk=item.pk %}">
-        {% csrf_token %}
-        <button type="submit" name="increase_amount">+</button>
-      </form>
-      <form method="POST" action="{% url 'main:decrease_amount' pk=item.pk %}">
-        {% csrf_token %}
-        <button type="submit" name="decrease_amount">-</button>
-      </form>
-      <form method="POST" action="{% url 'main:delete_item' pk=item.pk %}">
-        {% csrf_token %}
-        <button type="submit" name="delete_item">Delete</button>
-      </form>
-    </td>
-  </tr>
-
+<div class="row p-3">
+  {% for item in items %}
+  <div class="col-sm-4">
+    <div class="card bg-light mb-3">
+      <div class="card-header text-center {% if forloop.last %}text-danger{% endif %}"><h5>{{item.name}}</h5></div>
+      <div class="card-body">
+        <p class="card-text" style="text-align: justify;">
+          Price: <strong>{{item.price}}</strong><br/>
+          Amount: <strong>{{item.amount}}</strong><br/>
+          Author: <strong>{{item.author}}</strong><br/>
+          Description: <br/>
+          {{item.description}}
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+          <form method="POST" action="{% url 'main:increase_amount' pk=item.pk %}">
+            {% csrf_token %}
+            <button type="submit" name="increase_amount" class="btn btn-success">+</button>
+          </form>
+          <form method="POST" action="{% url 'main:decrease_amount' pk=item.pk %}">
+            {% csrf_token %}
+            <button type="submit" name="decrease_amount" class="btn btn-warning">-</button>
+          </form>
+          <form method="POST" action="{% url 'main:delete_item' pk=item.pk %}">
+            {% csrf_token %}
+            <button type="submit" name="delete_item" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   {% endfor %}
-</table>
+</div>
 
-<br />
+<div class="p-3 font-monospace d-flex justify-content-between">
+  <span>Sesi terakhir login: {{ last_login }}</span>
 
-<h5>Sesi terakhir login: {{ last_login }}</h5>
+  <div>
+    <a href="{% url 'main:create_item' %}" class="text-decoration-none">
+      <button class="btn btn-primary">Add New Item</button>
+    </a>
 
-<a href="{% url 'main:create_item' %}">
-  <button>Add New Item</button>
-</a>
+    <a href="{% url 'main:logout' %}" class="text-decoration-none">
+      <button class="btn btn-danger">Logout</button>
+    </a>
+  </div>
 
-<a href="{% url 'main:logout' %}">
-  <button>Logout</button>
-</a>
-
+</div>
 {% endblock content %}

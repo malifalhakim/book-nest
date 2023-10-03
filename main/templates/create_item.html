@@ -1,17 +1,45 @@
-{% extends 'base.html' %} {% block content %}
-<h1>Add New Item</h1>
+{% extends 'base.html' %} 
 
-<form method="POST">
-  {% csrf_token %}
-  <table>
-    {{ form.as_table }}
-    <tr>
-      <td></td>
-      <td>
-        <input type="submit" value="Add Item" />
-      </td>
-    </tr>
-  </table>
-</form>
+{% block content %}
+
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-journal-bookmark-fill"></i>
+      BookNest
+    </a>
+    <a class="btn btn-secondary" href="{% url 'main:show_main' %}">Back to Main</a>
+  </div>
+</nav>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="login border p-4">
+    <h1 class="mb-3 text-center"><i class="bi bi-file-plus"></i>Add New Item</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      {% for field in form %}
+
+      <div class="form-group mb-3 d-grid">
+        <strong>{{field.label}}</strong>
+        {% if field.name == "price" or field.name == "amount" %}
+          <input type="number" name="{{ field.name }}" class="responsive-input form-control" value="{{ field.value|default_if_none:'' }}" placeholder="{{field.label}}">
+        {% elif field.name == "description" %}
+          <textarea name="{{ field.name }}" class="responsive-input form-control" cols="60" rows="3" placeholder="{{field.label}}">{{ field.value|default_if_none:'' }}</textarea>
+        {% else %}
+          <input type="text" name="{{ field.name }}" class="responsive-input form-control" value="{{ field.value|default_if_none:'' }}" placeholder="{{field.label}}">
+        {% endif %}
+      </div>
+
+      {% endfor %}
+      
+      <div class="form-group mb-3 d-grid">
+        <button class="btn btn-outline-primary" type="submit">Add Item</button>
+      </div>
+        
+    </form>
+  </div>
+</div>
 
 {% endblock %}
