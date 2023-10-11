@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<!-- NAVIGATION BAR -->
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
@@ -9,58 +10,30 @@
       BookNest
     </a>
     <div>
-      <a class="btn btn-secondary" href="{% url 'main:create_item' %}">Add New Item</a>
+      <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Item</button>
       <a class="btn btn-secondary" href="{% url 'main:logout' %}">Logout</a>
     </div>
   </div>
 </nav>
 
+<!-- WEBSITE HEADER (TITLE, WELCOME) -->
 <h1 class="text-center mt-3 mb-5"><i class="bi bi-journal-bookmark-fill"></i>BookNest</h1>
 
 <div class="p-3 font-monospace">
   <p >Selamat datang <strong>{{name}}</strong> dari kelas <strong>{{class}}</strong></p>
-  <p>Saat ini, kamu memiliki total <strong>{{items.count}}</strong> judul buku.</p>
+  <p>Saat ini, kamu memiliki total <strong><span id="item-count"></span></strong> judul buku.</p>
 </div>
 
-<div class="row p-3">
-  {% for item in items %}
-  <div class="col-sm-4">
-    <div class="card bg-light mb-3">
-      <div class="card-header text-center {% if forloop.last %}text-danger{% endif %}"><h5>{{item.name}}</h5></div>
-      <div class="card-body">
-        <p class="card-text" style="text-align: justify;">
-          Price: <strong>{{item.price}}</strong><br/>
-          Amount: <strong>{{item.amount}}</strong><br/>
-          Author: <strong>{{item.author}}</strong><br/>
-          Description: <br/>
-          {{item.description}}
-        </p>
-        <div class="d-flex justify-content-center gap-3">
-          <form method="POST" action="{% url 'main:increase_amount' pk=item.pk %}">
-            {% csrf_token %}
-            <button type="submit" name="increase_amount" class="btn btn-success">+</button>
-          </form>
-          <form method="POST" action="{% url 'main:decrease_amount' pk=item.pk %}">
-            {% csrf_token %}
-            <button type="submit" name="decrease_amount" class="btn btn-warning">-</button>
-          </form>
-          <form method="POST" action="{% url 'main:delete_item' pk=item.pk %}">
-            {% csrf_token %}
-            <button type="submit" name="delete_item" class="btn btn-danger">Delete</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
+<!-- DISPLAY ALL DATA WITH JS -->
+<div class="row p-3" id="item-card"></div>
 
+<!-- FOOTER PART -->
 <div class="p-3 font-monospace d-flex justify-content-between">
   <span>Sesi terakhir login: {{ last_login }}</span>
 
   <div>
-    <a href="{% url 'main:create_item' %}" class="text-decoration-none">
-      <button class="btn btn-primary">Add New Item</button>
+    <a class="text-decoration-none">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Item</button>
     </a>
 
     <a href="{% url 'main:logout' %}" class="text-decoration-none">
@@ -69,4 +42,153 @@
   </div>
 
 </div>
+
+<!-- MODAL FOR ADD NEW ITEM -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content font-monospace fw-bold">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Add New Item</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form" onsubmit="return false;">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="col-form-label">Price:</label>
+                        <input type="number" class="form-control" id="price" name="price"></input>
+                    </div>
+                    <div class="mb-3">
+                      <label for="amount" class="col-form-label">Amount:</label>
+                      <input type="number" class="form-control" id="amount" name="amount"></input>
+                    </div>
+                    <div class="mb-3">
+                      <label for="author" class="col-form-label">Author:</label>
+                      <input type="text" class="form-control" id="author" name="author"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="col-form-label">Description:</label>
+                        <textarea class="form-control" id="description" name="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Product</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script>
+
+  // Get Item from database
+  async function getItem() {
+      return fetch("{% url 'main:get_item_json' %}").then((res) => res.json())
+  }
+
+  // Refresh Item without reloading
+  async function refreshItems(){
+    document.getElementById("item-card").innerHTML = ""
+    const items = await getItem()
+    let htmlString = ''
+    items.forEach((item,index) => {
+      const isLastItem = index === items.length - 1;
+
+      htmlString += `
+      <div class="col-sm-4">
+        <div class="card bg-light mb-3">
+          <div class="card-header text-center ${isLastItem ? 'text-danger' : ''}">
+            <h5>${item.fields.name}</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text" style="text-align: justify;">
+              Price: <strong>${item.fields.price}</strong><br/>
+              Amount: <strong>${item.fields.amount}</strong><br/>
+              Author: <strong>${item.fields.author}</strong><br/>
+              Description: <br/>
+              ${item.fields.description}
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+              <form class="increase-item" onsubmit="event.preventDefault(); increaseItem(${item.pk});">
+                <button type="submit" name="increase_amount" class="btn btn-success">+</button>
+              </form>
+              <form class="decrease-item" onsubmit="event.preventDefault(); decreaseItem(${item.pk});">
+                <button type="submit" name="decrease_amount" class="btn btn-warning">-</button>
+              </form>
+              <form class="delete-item" onsubmit="event.preventDefault(); deleteItem(${item.pk});">
+                <button type="submit" name="delete_item" class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>`
+    })
+
+    document.getElementById("item-count").innerHTML = items.length
+    document.getElementById("item-card").innerHTML = htmlString
+  }
+
+  refreshItems()
+
+  // Function untuk menambah item
+  function addItem() {
+    fetch("{% url 'main:add_item_ajax' %}", {
+        method: "POST",
+        body: new FormData(document.querySelector('#form'))
+    }).then(refreshItems)
+
+    document.getElementById("form").reset()
+    return false
+  }
+
+  document.getElementById("button_add").onclick = addItem
+
+  function deleteItem(id){
+    const url = "delete_item/" + id;
+    fetch(url, {
+      method:'DELETE',
+    }).then(() => {
+        refreshItems();
+    }).catch((error) => {
+        console.error('Error:', error);
+    });
+
+    return false
+  }
+
+  function increaseItem(id){
+    const url = "increase_amount/" + id + "/";
+    fetch(url, {
+      method:'POST',
+    }).then(() => {
+        refreshItems();
+    }).catch((error) => {
+        console.error('Error:', error);
+    });
+
+    return false
+  }
+
+  function decreaseItem(id){
+    const url = "decrease_amount/" + id + "/";
+    fetch(url, {
+      method:'POST',
+    }).then(() => {
+        refreshItems();
+    }).catch((error) => {
+        console.error('Error:', error);
+    });
+
+    return false
+  }
+  
+</script>
+
 {% endblock content %}
