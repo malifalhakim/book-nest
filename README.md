@@ -1057,6 +1057,8 @@ div class="container d-flex justify-content-center align-items-center" style="mi
 
 # Tugas 6
 
+Link Website : http://malif-al-tugas.pbp.cs.ui.ac.id
+
 ### Jelaskan perbedaan antara asynchronous programming dengan synchronous programming!
 
 Asynchronous programming adalah pendekatan programming yang bersifat *non-blocking architecture* sehingga eksekusi suatu task tidak bergantung pada eksekusi task yang lain. Task-task tersebut bisa berjalan secara bersamaan.
